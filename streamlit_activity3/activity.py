@@ -1,4 +1,7 @@
 import streamlit as st
+
+if "app_started" not in st.session_state:
+    st.session_state.app_started = True
 from streamlit_webrtc import webrtc_streamer
 from ultralytics import YOLO
 import av
@@ -297,12 +300,13 @@ left_col, right_col = st.columns([2, 1])
 with left_col:
     st.markdown('<div class="video-wrapper">', unsafe_allow_html=True)
     webrtc_streamer(
-        key="municipal-detection",
-        video_frame_callback=video_frame_callback,
-        async_processing=True,
-        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-        media_stream_constraints={"video": {"width": 1020, "height": 830}, "audio": False},
-    )
+    key="municipal-detection",
+    video_frame_callback=video_frame_callback,
+    rtc_configuration={
+        "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+    },
+    media_stream_constraints={"video": True, "audio": False},
+)
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ----- RIGHT: CONTROLS + ALERTS -----
