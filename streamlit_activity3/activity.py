@@ -2,6 +2,9 @@ import streamlit as st
 if "app_started" not in st.session_state:
     st.session_state.app_started = True
 from streamlit_webrtc import webrtc_streamer
+import torch
+from ultralytics.nn.tasks import DetectionModel
+torch.serialization.add_safe_globals([DetectionModel])
 from ultralytics import YOLO
 import av
 import cv2
@@ -108,8 +111,16 @@ st.markdown("""
 # ---------- Model Loading ----------
 @st.cache_resource(show_spinner=False)
 def load_model():
-    """Load YOLO model once and cache it to avoid reloading on every interaction."""
-    return YOLO("yolov8n.pt") 
+    import torch
+    from ultralytics import YOLO
+
+    # force compatibility with torch 2.6
+    torch.load = lambda *args, **kwargs: __import__("torch").load(
+        *args,
+        **{**kwargs, "weights_only": False}
+    )
+
+    return YOLO("yolov8n.pt")
 
 model = load_model()
 
