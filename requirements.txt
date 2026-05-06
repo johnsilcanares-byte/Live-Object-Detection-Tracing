@@ -1,12 +1,10 @@
 streamlit==1.37.0
 streamlit-webrtc==0.47.0
-
 ultralytics==8.3.0
 
 opencv-python-headless==4.10.0.84
-
-numpy==1.26.4
 av==12.3.0
+numpy==1.26.4
 Pillow==10.4.0
 
 tornado==6.4.2
