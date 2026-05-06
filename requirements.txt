@@ -1,5 +1,10 @@
 streamlit==1.37.0
 ultralytics==8.3.0
+
 opencv-python-headless==4.8.1.78
 numpy==1.26.4
 tornado==6.4.2
+
+torch==2.2.2
+torchvision==0.17.2
+lapx==0.5.2
