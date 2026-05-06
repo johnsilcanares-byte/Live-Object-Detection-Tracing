@@ -118,13 +118,24 @@ import streamlit as st
 
 @st.cache_resource(show_spinner="Loading YOLO Model...")
 def load_model():
+    # 1. Patch torch.load only if it hasn't been patched yet
     if not hasattr(torch, "_is_patched"):
-        original_load = torch.load
-        torch.load = lambda *args, **kwargs: original_load(*args, **{**kwargs, "weights_only": False})
-        torch._is_patched = True 
-    
+        # We store the REAL original function on the torch module itself
+        # so we don't lose it between Streamlit re-runs
+        torch._original_load = torch.load
+        
+        # Define the new load function
+        def patched_load(*args, **kwargs):
+            return torch._original_load(*args, **{**kwargs, "weights_only": False})
+        
+        torch.load = patched_load
+        torch._is_patched = True
+
+    # 2. Now load the model safely
     return YOLO("yolov8n.pt")
 
+# 3. Call the function
+model = load_model()
 # Now call the function to get the model
 model = load_model()
 # ---------- Directories & Queues for Alerts and Analytics ----------
