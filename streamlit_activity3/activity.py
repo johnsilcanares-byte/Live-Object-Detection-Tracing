@@ -109,7 +109,7 @@ st.markdown("""
 @st.cache_resource(show_spinner=False)
 def load_model():
     """Load YOLO model once and cache it to avoid reloading on every interaction."""
-    return YOLO("yolo11n.pt") 
+    return YOLO("yolov8n.pt") 
 
 model = load_model()
 
