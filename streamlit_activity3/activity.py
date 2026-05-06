@@ -122,7 +122,7 @@ torch.load = lambda *args, **kwargs: _original_torch_load(
     **{**kwargs, "weights_only": False}
 )
 
-return YOLO("yolov8n.pt")
+model = YOLO("yolov8n.pt")
 
 model = load_model()
 
