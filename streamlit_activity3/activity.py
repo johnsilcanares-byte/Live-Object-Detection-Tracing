@@ -1,5 +1,4 @@
 import streamlit as st
-
 if "app_started" not in st.session_state:
     st.session_state.app_started = True
 from streamlit_webrtc import webrtc_streamer
@@ -13,7 +12,12 @@ import queue
 import pandas as pd
 import numpy as np
 from collections import deque, defaultdict
-
+import asyncio
+try:
+    asyncio.get_event_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    
 st.set_page_config(
     page_title="Live Object Detection & Tracing",
     page_icon="🎥",
