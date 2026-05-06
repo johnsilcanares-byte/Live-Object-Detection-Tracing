@@ -7,6 +7,7 @@ import av
 import cv2
 import time
 import os
+os.environ["ULTRALYTICS_NO_CHECKS"] = "1"
 from collections import deque
 import queue
 import pandas as pd
