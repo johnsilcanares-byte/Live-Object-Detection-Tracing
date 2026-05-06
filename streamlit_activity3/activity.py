@@ -115,13 +115,12 @@ st.markdown("""
 @st.cache_resource(show_spinner=False)
 def load_model():
     import torch
-    from ultralytics import YOLO
+_original_torch_load = torch.load
 
-    # force compatibility with torch 2.6
-    torch.load = lambda *args, **kwargs: __import__("torch").load(
-        *args,
-        **{**kwargs, "weights_only": False}
-    )
+torch.load = lambda *args, **kwargs: _original_torch_load(
+    *args, 
+    **{**kwargs, "weights_only": False}
+)
 
     return YOLO("yolov8n.pt")
 
