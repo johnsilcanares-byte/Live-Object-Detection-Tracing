@@ -133,7 +133,7 @@ def load_model():
         torch._is_patched = True
 
     # 2. Now load the model safely
-    return YOLO("yolov8n.pt")
+    return YOLO("yolo11n.pt")
 
 # 3. Call the function
 model = load_model()
