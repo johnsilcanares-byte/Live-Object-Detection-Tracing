@@ -21,7 +21,10 @@ try:
     asyncio.get_event_loop()
 except RuntimeError:
     asyncio.set_event_loop(asyncio.new_event_loop())
-    
+
+torch.serialization.add_safe_globals(
+    ["ultralytics.nn.tasks.DetectionModel"]
+)
 st.set_page_config(
     page_title="Live Object Detection & Tracing",
     page_icon="🎥",
