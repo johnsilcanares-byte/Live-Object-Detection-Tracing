@@ -1,6 +1,7 @@
 streamlit==1.37.0
 streamlit-webrtc==0.47.0
-tornado==6.4.2
-av==12.3.0
-opencv-python-headless==4.10.0.84
 ultralytics==8.3.0
+opencv-python-headless==4.10.0.84
+av==12.3.0
+tornado==6.4.2
+numpy==1.26.4
