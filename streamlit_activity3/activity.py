@@ -310,7 +310,10 @@ with left_col:
     rtc_configuration={
         "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
     },
-    media_stream_constraints={"video": True, "audio": False},
+    media_stream_constraints={
+    "video": {"width": 640, "height": 480},
+    "audio": False
+},
 )
     st.markdown('</div>', unsafe_allow_html=True)
 
