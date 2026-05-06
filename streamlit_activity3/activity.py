@@ -112,20 +112,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------- Model Loading ----------
-@st.cache_resource(show_spinner=False)
+import torch
+from ultralytics import YOLO
+import streamlit as st
+
+@st.cache_resource(show_spinner="Loading YOLO Model...")
 def load_model():
-    import torch
-_original_torch_load = torch.load
+    if not hasattr(torch, "_is_patched"):
+        original_load = torch.load
+        torch.load = lambda *args, **kwargs: original_load(*args, **{**kwargs, "weights_only": False})
+        torch._is_patched = True 
+    
+    return YOLO("yolov8n.pt")
 
-torch.load = lambda *args, **kwargs: _original_torch_load(
-    *args, 
-    **{**kwargs, "weights_only": False}
-)
-
-model = YOLO("yolov8n.pt")
-
+# Now call the function to get the model
 model = load_model()
-
 # ---------- Directories & Queues for Alerts and Analytics ----------
 SAVE_DIR = "detected_frames"
 os.makedirs(SAVE_DIR, exist_ok=True)
