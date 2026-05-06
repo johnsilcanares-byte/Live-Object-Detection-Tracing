@@ -1,6 +1,7 @@
 import streamlit as st
-if not hasattr(st, "experimental_rerun"):
-    st.experimental_rerun = st.rerun
+
+if "app_started" not in st.session_state:
+    st.session_state.app_started = True
 from streamlit_webrtc import webrtc_streamer
 import torch
 from ultralytics.nn.tasks import DetectionModel
@@ -337,23 +338,11 @@ with left_col:
     webrtc_streamer(
     key="municipal-detection",
     video_frame_callback=video_frame_callback,
-    async_processing=True,
-
-    rtc_configuration={
-        "iceServers": [
-            {"urls": ["stun:stun.l.google.com:19302"]},
-            {"urls": ["stun:stun1.l.google.com:19302"]}
-        ]
+    rtc_configuration={  # Add this block
+        "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
     },
-
-    media_stream_constraints={
-        "video": {
-            "width": {"ideal": 640},
-            "height": {"ideal": 480},
-            "frameRate": {"ideal": 15}
-        },
-        "audio": False
-    }
+    media_stream_constraints={"video": True, "audio": False}, # Ensure audio is off to save bandwidth
+    async_processing=True,
 )
     st.markdown('</div>', unsafe_allow_html=True)
 
