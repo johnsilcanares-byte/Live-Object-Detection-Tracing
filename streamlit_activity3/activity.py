@@ -190,8 +190,13 @@ def video_frame_callback(frame):
     img = frame.to_ndarray(format="bgr24")
     t0 = time.time()
 
-    # Run YOLO tracking (persist=True keeps track IDs across frames)
-    results = model.track(img, persist=True, conf=CONFIDENCE, imgsz=640, verbose=False)
+    # Run YOLO tracking 
+    results = model.track(
+    img,
+    persist=True,
+    conf=CONFIDENCE,
+    imgsz=416,  
+    verbose=False)
 
     # Annotate frame with bounding boxes, labels, and confidence scores
     annotated = results[0].plot(conf=True, labels=True, boxes=True)
@@ -307,13 +312,23 @@ with left_col:
     webrtc_streamer(
     key="municipal-detection",
     video_frame_callback=video_frame_callback,
+    async_processing=True,
+
     rtc_configuration={
-        "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+        "iceServers": [
+            {"urls": ["stun:stun.l.google.com:19302"]},
+            {"urls": ["stun:stun1.l.google.com:19302"]}
+        ]
     },
+
     media_stream_constraints={
-    "video": {"width": 640, "height": 480},
-    "audio": False
-},
+        "video": {
+            "width": {"ideal": 640},
+            "height": {"ideal": 480},
+            "frameRate": {"ideal": 15}
+        },
+        "audio": False
+    }
 )
     st.markdown('</div>', unsafe_allow_html=True)
 
