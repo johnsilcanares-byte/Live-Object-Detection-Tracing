@@ -11,7 +11,7 @@ A Python-based web application that performs real-time object detection and trac
 
 • Easy Dependency Management: Includes configured requirements.txt, packages.txt, and constraints.txt files for reproducible environments.
 
-Here's the my streamlit link: 
+Here's the my streamlit link: 👉 
 https://live-object-detection-tracing-by-johnsilcanares.streamlit.app/
 
 Live-Object-Detection-Tracing/
