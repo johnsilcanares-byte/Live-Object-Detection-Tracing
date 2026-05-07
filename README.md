@@ -1,7 +1,7 @@
 ## Live Object Detection & Tracing
 A Python-based web application that performs real-time object detection and tracking using YOLO models. Built with a user-friendly Streamlit interface, this tool allows users to run live inference and trace object movements seamlessly.
 
-🚀 Functionalities
+## 🚀 Functionalities
 
 • Real-Time Object Detection: Identifies and draws bounding boxes around objects in live video feeds or uploaded media using a YOLO architecture (e.g., YOLOv11).
 
@@ -14,7 +14,7 @@ A Python-based web application that performs real-time object detection and trac
 Here's the my streamlit link: 👉 
 https://live-object-detection-tracing-by-johnsilcanares.streamlit.app/
 
-File Structure:
+## File Structure:
 
 ```text
 Live-Object-Detection-Tracing/
