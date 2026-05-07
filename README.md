@@ -14,6 +14,8 @@ A Python-based web application that performs real-time object detection and trac
 Here's the my streamlit link: 👉 
 https://live-object-detection-tracing-by-johnsilcanares.streamlit.app/
 
+File Structure:
+
 ```text
 Live-Object-Detection-Tracing/
 │
