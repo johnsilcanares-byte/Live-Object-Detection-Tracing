@@ -1,0 +1,6 @@
+libavcodec-dev
+libavformat-dev
+libswscale-dev
+libavdevice-dev
+libavfilter-dev
+libx264-dev
