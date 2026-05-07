@@ -4,8 +4,6 @@ if "app_started" not in st.session_state:
     st.session_state.app_started = True
 from streamlit_webrtc import webrtc_streamer
 import torch
-from ultralytics.nn.tasks import DetectionModel
-torch.serialization.add_safe_globals([DetectionModel])
 from ultralytics import YOLO
 import av
 import cv2
@@ -117,27 +115,11 @@ import torch
 from ultralytics import YOLO
 import streamlit as st
 
-@st.cache_resource(show_spinner="Loading YOLO Model...")
+@st.cache_resource(show_spinner=False)
 def load_model():
-    # 1. Patch torch.load only if it hasn't been patched yet
-    if not hasattr(torch, "_is_patched"):
-        # We store the REAL original function on the torch module itself
-        # so we don't lose it between Streamlit re-runs
-        torch._original_load = torch.load
-        
-        # Define the new load function
-        def patched_load(*args, **kwargs):
-            return torch._original_load(*args, **{**kwargs, "weights_only": False})
-        
-        torch.load = patched_load
-        torch._is_patched = True
+    from ultralytics import YOLO
+    return YOLO("yolov8n.pt")
 
-    # 2. Now load the model safely
-    return YOLO("yolo11n.pt")
-
-# 3. Call the function
-model = load_model()
-# Now call the function to get the model
 model = load_model()
 # ---------- Directories & Queues for Alerts and Analytics ----------
 SAVE_DIR = "detected_frames"
@@ -338,11 +320,15 @@ with left_col:
     webrtc_streamer(
     key="municipal-detection",
     video_frame_callback=video_frame_callback,
-    rtc_configuration={  # Add this block
-        "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-    },
-    media_stream_constraints={"video": True, "audio": False}, # Ensure audio is off to save bandwidth
     async_processing=True,
+    media_stream_constraints={
+        "video": {
+            "width": {"ideal": 640},
+            "height": {"ideal": 480},
+            "frameRate": {"ideal": 15},
+        },
+        "audio": False,
+    },
 )
     st.markdown('</div>', unsafe_allow_html=True)
 
