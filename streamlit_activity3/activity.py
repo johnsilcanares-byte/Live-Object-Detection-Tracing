@@ -193,22 +193,25 @@ def draw_pill_text(img, text, pos, bg_color=(0,0,0,140), text_color=(255,255,255
 # ---------- Video Frame Callback ----------
 def video_frame_callback(frame):
     img = frame.to_ndarray(format="bgr24")
-    
-    # Use session_state to get the latest slider values
+    t0 = time.time()
+
+    # Safely get values from session state
     conf_value = st.session_state.get("CONFIDENCE", 0.5)
     target_obj = st.session_state.get("TARGET_OBJECT", "person")
+    consistency = st.session_state.get("ALERT_CONSISTENCY", 2)
     crowd_limit = st.session_state.get("CROWD_THRESHOLD", 10)
 
-    results = model.track(
-        img,
-        persist=True,
-        conf=conf_value, # Use the local variable
-        imgsz=416,  
-        verbose=False
-    )
-
-    # Annotate frame with bounding boxes, labels, and confidence scores
+    results = model.track(img, persist=True, conf=conf_value, imgsz=416, verbose=False)
     annotated = results[0].plot(conf=True, labels=True, boxes=True)
+
+    # Logic using the local variables
+    person_count = 0
+    if results[0].boxes.cls is not None:
+        cls_names = [model.names[int(c)] for c in results[0].boxes.cls]
+        person_count = cls_names.count("person")
+        target_present = target_obj in cls_names
+    else:
+        target_present = False
 
     # ---- Count objects by class ----
     cls_array = []
