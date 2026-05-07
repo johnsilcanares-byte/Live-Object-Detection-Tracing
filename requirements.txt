@@ -2,7 +2,8 @@ streamlit==1.37.0
 streamlit-webrtc==0.47.9
 ultralytics==8.2.82
 opencv-python-headless
-numpy==1.26.4
+numpy<2.0.0
 av==12.3.0
+lapx>=0.5.2
 torch==2.4.1    
 torchvision==0.19.1
