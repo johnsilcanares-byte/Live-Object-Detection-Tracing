@@ -1,11 +1,23 @@
 import streamlit as st
+
+if "app_started" not in st.session_state:
+    st.session_state.app_started = True
 from streamlit_webrtc import webrtc_streamer
 from ultralytics import YOLO
 import av
 import cv2
-import numpy as np
-import tempfile
 import time
+import os
+from collections import deque
+import queue
+import pandas as pd
+import numpy as np
+from collections import deque, defaultdict
+import asyncio
+try:
+    asyncio.get_event_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
 
 torch.serialization.add_safe_globals(
     ["ultralytics.nn.tasks.DetectionModel"]
