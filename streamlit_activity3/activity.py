@@ -14,7 +14,9 @@ import torch
 import pandas as pd
 import numpy as np
 from collections import deque, defaultdict
-import asyncio
+RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+)
 try:
     asyncio.get_event_loop()
 except RuntimeError:
@@ -189,21 +191,19 @@ def draw_pill_text(img, text, pos, bg_color=(0,0,0,140), text_color=(255,255,255
 
 # ---------- Video Frame Callback ----------
 def video_frame_callback(frame):
-    """
-    Process each video frame: run YOLO detection/tracking, annotate, count objects,
-    trigger alerts, and save frames when conditions are met.
-    """
-    # Convert incoming frame to OpenCV BGR format
     img = frame.to_ndarray(format="bgr24")
-    t0 = time.time()
+    
+    # Use session_state to get the latest slider values
+    conf_value = st.session_state.get("CONFIDENCE", 0.5)
+    target_obj = st.session_state.get("TARGET_OBJECT", "person")
 
-    # Run YOLO tracking 
     results = model.track(
-    img,
-    persist=True,
-    conf=CONFIDENCE,
-    imgsz=416,  
-    verbose=False)
+        img,
+        persist=True,
+        conf=conf_value, # Use the local variable
+        imgsz=416,  
+        verbose=False
+    )
 
     # Annotate frame with bounding boxes, labels, and confidence scores
     annotated = results[0].plot(conf=True, labels=True, boxes=True)
@@ -317,18 +317,19 @@ left_col, right_col = st.columns([2, 1])
 with left_col:
     st.markdown('<div class="video-wrapper">', unsafe_allow_html=True)
     webrtc_streamer(
-    key="live-object-detection",
-    video_frame_callback=video_frame_callback,
-    async_processing=True,
-    media_stream_constraints={
-        "video": {
-            "width": {"ideal": 640},
-            "height": {"ideal": 480},
-            "frameRate": {"ideal": 15},
+        key="live-object-detection",
+        video_frame_callback=video_frame_callback,
+        rtc_configuration=RTC_CONFIGURATION, # <-- ADD THIS LINE
+        async_processing=True,
+        media_stream_constraints={
+            "video": {
+                "width": {"ideal": 640},
+                "height": {"ideal": 480},
+                "frameRate": {"ideal": 15},
+            },
+            "audio": False,
         },
-        "audio": False,
-    },
-)
+    )
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ----- RIGHT: CONTROLS + ALERTS -----
