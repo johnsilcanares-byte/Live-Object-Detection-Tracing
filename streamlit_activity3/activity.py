@@ -1,22 +1,11 @@
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer
-import torch
 from ultralytics import YOLO
 import av
 import cv2
-import time
-import os
-os.environ["ULTRALYTICS_NO_CHECKS"] = "1"
-from collections import deque
-import queue
-import pandas as pd
 import numpy as np
-from collections import deque, defaultdict
-import asyncio
-try:
-    asyncio.get_event_loop()
-except RuntimeError:
-    asyncio.set_event_loop(asyncio.new_event_loop())
+import tempfile
+import time
 
 torch.serialization.add_safe_globals(
     ["ultralytics.nn.tasks.DetectionModel"]
