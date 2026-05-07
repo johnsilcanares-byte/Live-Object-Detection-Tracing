@@ -2,7 +2,7 @@ import streamlit as st
 
 if "app_started" not in st.session_state:
     st.session_state.app_started = True
-from streamlit_webrtc import webrtc_streamer
+from streamlit_webrtc import webrtc_streamer, RTCConfiguration
 from ultralytics import YOLO
 import av
 import cv2
