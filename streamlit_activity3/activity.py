@@ -318,7 +318,6 @@ with left_col:
     st.markdown('<div class="video-wrapper">', unsafe_allow_html=True)
     webrtc_streamer(
     key="live-object-detection",
-    rtc_configuration=RTC_CONFIGURATION,
     video_frame_callback=video_frame_callback,
     async_processing=True,
     media_stream_constraints={
