@@ -197,6 +197,7 @@ def video_frame_callback(frame):
     # Use session_state to get the latest slider values
     conf_value = st.session_state.get("CONFIDENCE", 0.5)
     target_obj = st.session_state.get("TARGET_OBJECT", "person")
+    crowd_limit = st.session_state.get("CROWD_THRESHOLD", 10)
 
     results = model.track(
         img,
